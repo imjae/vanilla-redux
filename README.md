@@ -60,3 +60,16 @@ countStore.getState();
 ### 2021-01-29
 > 1. 27일에 했던 소스 index_old.js로 변경후 새로운 index.js 작성
 > 2. vanilla + redux 로 간단한 todo list 만듦.
+> 3. state를 수정할때는 절대로 직접적인 수정을 하면 안된다.
+```javascript
+const reducer = (state = [], action) => {
+    // console.log("reducer");
+  switch (action.type) {
+    case ADD_TODO:
+      return state.push(action.text); // 잘못된 방법
+      return [...state, { text: action.text, id: Date.now() }];
+  }
+};
+```
+> state.push(action.text); 와 같은 형식으로 state 수정을 하면 안된다.
+> 새로운 state를 create 하고 그 새로운 state를 return 해준다 <= 중요
