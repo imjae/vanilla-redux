@@ -69,10 +69,12 @@ const reducer = (state = [], action) => {
       return state.push(action.text); // 잘못된 방법
       return [...state, { text: action.text, id: Date.now() }];
   }
-};
+};  
+
+state.push(action.text); 와 같은 형식으로 state 수정을 하면 안된다.  
+새로운 state를 create 하고 그 새로운 state를 return 해준다 <= 중요
 ```
-> state.push(action.text); 와 같은 형식으로 state 수정을 하면 안된다.
-> 새로운 state를 create 하고 그 새로운 state를 return 해준다 <= 중요
+ 
   
 > 4. delete 디스패치에 id 넘기는 부분까지 진행
 > 디스패치 함수의 인자값으로 오브젝트를 넘기기 보다 해당 오브젝트를 반환하는 새로운 함수롤 생성해 주는게 구조적으로 좋다.
