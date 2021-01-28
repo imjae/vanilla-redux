@@ -56,3 +56,7 @@ countStore.getState();
 ```
 > 와 같이 해당 store에 저장된 state변수를 언제든지 불러올수 있다.
 > 이때 중요한건 store에 연결된 reducer함수가 return해주는 값이 해당 store의 데이터 라는 것이다.
+
+### 2021-01-29
+> 1. 27일에 했던 소스 index_old.js로 변경후 새로운 index.js 작성
+> 2. vanilla + redux 로 간단한 todo list 만듦.
