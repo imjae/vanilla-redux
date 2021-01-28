@@ -60,7 +60,7 @@ countStore.getState();
 ### 2021-01-29
 > 1. 27일에 했던 소스 index_old.js로 변경후 새로운 index.js 작성
 > 2. vanilla + redux 로 간단한 todo list 만듦.
-> 3. state를 수정할때는 절대로 직접적인 수정을 하면 안된다.
+> 3. state를 수정할때는 절대로 직접적인 수정을 하면 안된다. state를 수정할수 있는 유일한 방법은 reducer의 action 뿐이다. 이게 리덕스의 가장 큰 장점
 ```javascript
 const reducer = (state = [], action) => {
     // console.log("reducer");
@@ -73,3 +73,16 @@ const reducer = (state = [], action) => {
 ```
 > state.push(action.text); 와 같은 형식으로 state 수정을 하면 안된다.
 > 새로운 state를 create 하고 그 새로운 state를 return 해준다 <= 중요
+  
+> 4. delete 디스패치에 id 넘기는 부분까지 진행
+> 디스패치 함수의 인자값으로 오브젝트를 넘기기 보다 해당 오브젝트를 반환하는 새로운 함수롤 생성해 주는게 구조적으로 좋다.
+```javascript
+const deleteToDo = (id) => {
+  return { type: DELETE_TODO, id };
+};
+
+const dispatchDeleteTodo = (e) => {
+  const id = e.target.parentNode.id;
+  store.dispatch(deleteToDo(id));
+};
+```
