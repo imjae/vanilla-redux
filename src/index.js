@@ -1,35 +1,75 @@
 import { createStore } from "redux";
-// createStore는 데이터를 넣는 곳 생성 
-// 데이터 관리
-const add = document.getElementById("add");
-const minus = document.getElementById("minus");
-const number = document.querySelector("span");
 
+const form = document.querySelector("form");
+const input = document.querySelector("input");
+const ul = document.querySelector("ul");
 
-// store의 dispatch함수로인해 실행되는 reducer함수의 두번째 인자인 action에 객체를 넘겨줄때
-// 해당 객체의 type 프로퍼티에 문자열을 넘겨준다면 브라우저는 잘못된값이 넘어와도 에러를 호출하지 않는다.
-// 아래와 같이 const 변수로 선언하고, type에 해당 변수를 넘겨준후, reducer에서 조건 체크를 동일한 변수로
-// 해 준다면, 휴먼에러를 대응해 줄수 있다.
-const ADD = "ADD";
-const MINUS = "MINUS";
+const ADD_TODO = "ADD_TODO";
+const DELETE_TODO = "DELETE_TODO";
 
-const conutModifier = (count  = 0, action) => {
-  if(action.type === ADD) {
-    return count + 1;
-  } else if(action.type === MINUS) {
-    return count - 1;
-  } else {
-    return count ;
+const reducer = (state = [], action) => {
+  // console.log("reducer");
+  switch (action.type) {
+    case ADD_TODO:
+      //return state.push(action.text);
+      return [{ text: action.text, id: Date.now() }, ...state];
+    case DELETE_TODO:
+      return [];
+
+    default:
+      return state;
   }
 };
+// 절대 mutate state는 사용하지 말자.
+const store = createStore(reducer);
 
-const countStore = createStore(conutModifier);
+store.subscribe(() => console.log(store.getState()));
 
-const onChange = () => {
-  number.innerText = countStore.getState();
+const addToDo = (text) => {
+  return { type: ADD_TODO, text };
+};
+const deleteToDo = (id) => {
+  return { type: DELETE_TODO, id };
 };
 
-countStore.subscribe(onChange);
+const dispatchAddToDo = (text) => {
+  store.dispatch(addToDo(text));
+};
 
-add.addEventListener("click", () => countStore.dispatch({type: ADD}));
-minus.addEventListener("click", () => countStore.dispatch({type: MINUS}));
+const dispatchDeleteTodo = (e) => {
+  const id = e.target.parentNode.id;
+  store.dispatch(deleteToDo(id));
+};
+
+const paintToDos = () => {
+  const todos = store.getState();
+  ul.innerHTML = "";
+  todos.forEach((todo) => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.innerText = "DEL";
+    btn.addEventListener("click", dispatchDeleteTodo);
+    li.id = todo.id;
+    li.innerText = todo.text;
+    li.appendChild(btn);
+    ul.appendChild(li);
+  });
+};
+
+store.subscribe(paintToDos);
+
+const onSubmit = (e) => {
+  //   console.log("onSubmit");
+  e.preventDefault();
+  const todo = input.value;
+  input.value = "";
+  dispatchAddToDo(todo);
+};
+
+form.addEventListener("submit", onSubmit);
+
+// state를 수정할수 있는 유일한 방법은 reducer의 action 뿐이다. 이게 리덕스의 가장 큰 장점
+// mutation(변형) 이란 ?..
+// 배열에 임의로 push를 하는 행동 -> 상태를 수정하는 행동
+// state를 임의로 수정하는것이 아니라 state 배열을 새로운 배열에 카피한후, 추가해준다
+// 새로운 state를 create 하고 그 새로운 state를 return 해준다 <= 중요
