@@ -88,3 +88,11 @@ const dispatchDeleteTodo = (e) => {
   store.dispatch(deleteToDo(id));
 };
 ```
+
+### 2021-01-30
+> 1. 리덕스의 state값을 관리하는 reducer 함수에 todo데이터 삭제 로직 추가함.
+```javascript
+case DELETE_TODO:
+  return state.filter(todo => todo.id !== action.id);
+  와 같이 filter 함수(새로운 배열을 return 해준다) 사용하여 state를 변형(mutate) 하지 않도록 한다! <= 중요!
+```
