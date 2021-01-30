@@ -96,3 +96,4 @@ case DELETE_TODO:
   return state.filter(todo => todo.id !== action.id);
   와 같이 filter 함수(새로운 배열을 return 해준다) 사용하여 state를 변형(mutate) 하지 않도록 한다! <= 중요!
 ```
+> 2. vanillajs -> react 로 변경, 해당 깃 프로젝스 description 변경
